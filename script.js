@@ -1,57 +1,62 @@
-function startReview(){
+const API_KEY = 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;
 
-    const name = document.getElementById("studentName").value;
-    const section = document.getElementById("studentSection").value;
+function startReview() {
+  const name = document.getElementById("studentName").value;
+  const section = document.getElementById("studentSection").value;
 
-    if(name==="" || section===""){
-        alert("Please enter your Name and Grade & Section.");
-        return;
-    }
+  if (!name || !section) {
+    alert("Please enter your Name and Grade & Section.");
+    return;
+  }
 
-    localStorage.setItem("studentName",name);
-    localStorage.setItem("studentSection",section);
+  document.getElementById("chat").innerHTML = `
+    <h2>Welcome, ${name}! 👋</h2>
+    <p>${section}</p>
 
-    document.getElementById("chat").innerHTML=`
-        <h2>Welcome, ${name}! 👋</h2>
+    <div id="messages" style="margin:20px 0;"></div>
 
-        <p><b>Grade & Section:</b> ${section}</p>
-
-        <hr>
-
-        <h3>Ask me anything about EPAS!</h3>
-
-        <input id="userQuestion"
-        placeholder="Example: What is Ohm's Law?">
-
-        <br><br>
-
-        <button onclick="askAI()">
-        Ask EPAS AI
-        </button>
-
-        <div id="answer" style="margin-top:25px;"></div>
-    `;
+    <input id="userQuestion" placeholder="Ask any EPAS question...">
+    <br><br>
+    <button onclick="askAI()">Send</button>
+  `;
 }
 
-function askAI(){
+async function askAI() {
+  const question = document.getElementById("userQuestion").value;
+  const messages = document.getElementById("messages");
 
-    const q=document.getElementById("userQuestion").value.toLowerCase();
+  messages.innerHTML += `<p><b>👤 You:</b> ${question}</p>`;
+  messages.innerHTML += `<p id="loading"><b>🤖 EPAS AI:</b> Thinking...</p>`;
 
-    let answer="Sorry, I don't know that yet. More EPAS lessons will be added soon.";
+  try {
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + API_KEY,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "llama-3.3-70b-versatile",
+        messages: [
+          {
+            role: "system",
+            content: "You are EPAS AI. You help Grade 12 students in the Philippines study Electronic Products Assembly and Servicing (EPAS). Give accurate, educational answers."
+          },
+          {
+            role: "user",
+            content: question
+          }
+        ]
+      })
+    });
 
-    if(q.includes("ohm")){
-        answer="Ohm's Law states that Voltage = Current × Resistance (V = I × R).";
-    }
+    const data = await response.json();
 
-    if(q.includes("resistor")){
-        answer="A resistor limits the flow of electrical current in a circuit.";
-    }
+    document.getElementById("loading").remove();
 
-    if(q.includes("series")){
-        answer="In a series circuit, components are connected one after another in a single path.";
-    }
-
-    document.getElementById("answer").innerHTML=
-    "<h3>🤖 EPAS AI</h3><p>"+answer+"</p>";
-
+    messages.innerHTML += `<p><b>🤖 EPAS AI:</b> ${data.choices[0].message.content}</p>`;
+  } catch (err) {
+    document.getElementById("loading").innerHTML =
+      "<b>🤖 EPAS AI:</b> Error connecting to AI.";
+  }
 }
