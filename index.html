@@ -1,16 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EPAS AI</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EPAS AI</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>⚡ EPAS AI</h1>
-<p>Welcome to your Grade 12 EPAS Review Buddy!</p>
+<header>
+    ⚡ EPAS AI
+</header>
+
+<div class="container">
+
+    <div class="chat-box" id="chat">
+
+        <h2>👋 Welcome to EPAS AI</h2>
+
+        <p>Your Grade 12 Electronic Products Assembly and Servicing reviewer.</p>
+
+        <hr>
+
+        <p><b>Try asking:</b></p>
+
+        <ul>
+            <li>What is a resistor?</li>
+            <li>Explain Ohm's Law.</li>
+            <li>Safety precautions in soldering.</li>
+            <li>Generate a 10-item quiz.</li>
+        </ul>
+
+    </div>
+
+    <div class="input-area">
+
+        <input
+            id="userInput"
+            type="text"
+            placeholder="Ask anything about EPAS..."
+        >
+
+        <button onclick="sendMessage()">
+            Send
+        </button>
+
+    </div>
+
+</div>
 
 <script src="script.js"></script>
+
 </body>
 </html>
