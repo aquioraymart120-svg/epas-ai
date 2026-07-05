@@ -1,4 +1,4 @@
-const API_KEY = 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;
+const API_KEY = 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;
 
 function startReview() {
   const name = document.getElementById("studentName").value;
