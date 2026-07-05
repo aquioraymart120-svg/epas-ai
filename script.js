@@ -1,19 +1,57 @@
-console.log("⚡ EPAS AI Loaded!");
+function startReview(){
 
-function sendMessage() {
-    const input = document.getElementById("userInput");
-    const chat = document.getElementById("chat");
+    const name = document.getElementById("studentName").value;
+    const section = document.getElementById("studentSection").value;
 
-    if (!input || !chat || input.value.trim() === "") return;
+    if(name==="" || section===""){
+        alert("Please enter your Name and Grade & Section.");
+        return;
+    }
 
-    const userMessage = document.createElement("p");
-    userMessage.innerHTML = "<strong>You:</strong> " + input.value;
+    localStorage.setItem("studentName",name);
+    localStorage.setItem("studentSection",section);
 
-    const aiMessage = document.createElement("p");
-    aiMessage.innerHTML = "<strong>EPAS AI:</strong> This feature is coming soon! 🤖";
+    document.getElementById("chat").innerHTML=`
+        <h2>Welcome, ${name}! 👋</h2>
 
-    chat.appendChild(userMessage);
-    chat.appendChild(aiMessage);
+        <p><b>Grade & Section:</b> ${section}</p>
 
-    input.value = "";
+        <hr>
+
+        <h3>Ask me anything about EPAS!</h3>
+
+        <input id="userQuestion"
+        placeholder="Example: What is Ohm's Law?">
+
+        <br><br>
+
+        <button onclick="askAI()">
+        Ask EPAS AI
+        </button>
+
+        <div id="answer" style="margin-top:25px;"></div>
+    `;
+}
+
+function askAI(){
+
+    const q=document.getElementById("userQuestion").value.toLowerCase();
+
+    let answer="Sorry, I don't know that yet. More EPAS lessons will be added soon.";
+
+    if(q.includes("ohm")){
+        answer="Ohm's Law states that Voltage = Current × Resistance (V = I × R).";
+    }
+
+    if(q.includes("resistor")){
+        answer="A resistor limits the flow of electrical current in a circuit.";
+    }
+
+    if(q.includes("series")){
+        answer="In a series circuit, components are connected one after another in a single path.";
+    }
+
+    document.getElementById("answer").innerHTML=
+    "<h3>🤖 EPAS AI</h3><p>"+answer+"</p>";
+
 }
